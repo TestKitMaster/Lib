@@ -19,7 +19,7 @@ int Init(void)
 {	//chekc is needed
 	if (!gcry_check_version (NULL))
 	{
-
+	printf ("test\n");
 	printf ("libgcrypt version mismatch\n ");
 	}
 
