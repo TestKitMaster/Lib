@@ -9,7 +9,10 @@ int main(void)
 	printf("test\nnumber1:");
 
 	Init();
-	setDeg(12,0);
+	gcry_mpi_t number;
+	mpiNew(1024,number);
+	mpiOut(number);
+	/*setDeg(12,0);
 	setQ(7,0);
 	long *test1, *test2,*test3,*test4,*test5;
 	long *test6;
@@ -19,7 +22,7 @@ int main(void)
 	{
 		test6=randNormElement(0);
 		printEle(test6,0);
-printf("\n");
+		printf("\n");
 	}
 	test2=randNormElement(0);
 	printEle(test1,0);
@@ -36,5 +39,6 @@ printf("\n");
 		printEle(test5,0);
 		randTest();
 		printf("\n size: %d",sizeof(long));
+		*/
 return 0;
 }
