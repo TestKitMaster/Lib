@@ -7,7 +7,7 @@
 
 #ifndef NTLC_H_
 #define NTLC_H_
-
+#include <gcrypt.h>
 
 #define TWO_PI 6.2831853071795864769252866 		//required for calculation of normal distributed variables
 
@@ -64,4 +64,12 @@ long* sub(long* ele1, long* ele2, long index);
 void printEle(long* ele ,long index);
 long* mult(long* ele1, long* ele2, long index);
 void randTest();
+
+/*functions for mpi*/
+
+/*create a new secure number*/
+void mpiNew(int,gcry_mpi_t );
+
+void mpiOut();
+
 #endif /* NTLC_H_ */

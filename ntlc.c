@@ -23,12 +23,59 @@ int Init(void)
 	printf ("libgcrypt version mismatch\n ");
 	}
 
-	/* ... If required, other initialization goes here. */
+	/* We don't want to see any warnings, e.g. because we have not yet
+	          parsed program options which might be used to suppress such
+	          warnings. */
+	gcry_control (GCRYCTL_SUSPEND_SECMEM_WARN);
+
+	/* Allocate a pool of 2MB secure memory.  This make the secure memory
+	           available and also drops privileges where needed.  */
+	gcry_control (GCRYCTL_INIT_SECMEM, 2097152, 0);
+	 /* It is now okay to let Libgcrypt complain when there was/is
+	     	 a problem with the secure memory. */
+    gcry_control (GCRYCTL_RESUME_SECMEM_WARN) ;
 	/* Tell Libgcrypt that initialization has completed. */
 	gcry_control (GCRYCTL_INITIALIZATION_FINISHED, 0);
 
 	return 0;
 }
+
+/*create a new MPI number with this many bytes*/
+void mpiNew(int bytes,gcry_mpi_t output)
+{
+	output = gcry_mpi_snew(bytes);
+
+}
+
+/*output this number*/
+void mpiOut(gcry_mpi_t value)
+{	int i=0;
+	size_t nscanned;
+	char  buffer[1024],buffer2[1024]; //buffer for the output
+	gcry_randomize (buffer, 1024, GCRY_STRONG_RANDOM);
+	printf("\n random buffer: ");
+	for (i = 0; i<1024; i++){
+		if(i%128==0)
+			printf("\n");
+		printf("%02X", (unsigned char)buffer[i]);
+	}
+	printf("\n");
+	gcry_mpi_t test;
+	test=gcry_mpi_snew(1024);
+	gcry_mpi_scan(&test,GCRYMPI_FMT_STD,buffer,sizeof(buffer),&nscanned);
+	printf("nscanned: %zu\n",nscanned);
+	gcry_mpi_print(GCRYMPI_FMT_STD,buffer2,sizeof(buffer2),NULL,test); //converts the MPI to a writable buffer
+	printf("\n random buffer2:\n");
+	for (i = 0; i<1024; i++){
+			if(i%128==0)
+				printf("\n");
+			printf("%02X", (unsigned char)buffer2[i]);
+		}
+
+	printf("\n test");
+
+}
+
 int setQ(long q,long ringIndex)
 {
 	if((ringIndex+1)>getIndex())							//check if the ring array already has this element
