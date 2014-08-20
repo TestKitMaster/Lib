@@ -70,6 +70,6 @@ void randTest();
 /*create a new secure number*/
 void mpiNew(int,gcry_mpi_t );
 
-void mpiOut();
-
+void mpiOut2(gcry_mpi_t);
+void mpiOut(gcry_mpi_t, size_t);
 #endif /* NTLC_H_ */

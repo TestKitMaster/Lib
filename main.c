@@ -11,7 +11,7 @@ int main(void)
 	Init();
 	gcry_mpi_t number;
 	mpiNew(1024,number);
-	mpiOut(number);
+	mpiOut2(number);
 	/*setDeg(12,0);
 	setQ(7,0);
 	long *test1, *test2,*test3,*test4,*test5;

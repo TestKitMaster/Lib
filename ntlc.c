@@ -47,29 +47,42 @@ void mpiNew(int bytes,gcry_mpi_t output)
 
 }
 
-/*output this number*/
-void mpiOut(gcry_mpi_t value)
-{	int i=0;
-	size_t nscanned;
-	char  buffer[1024],buffer2[1024]; //buffer for the output
-	gcry_randomize (buffer, 1024, GCRY_STRONG_RANDOM);
-	printf("\n random buffer: ");
-	for (i = 0; i<1024; i++){
-		if(i%128==0)
+void mpiOut(gcry_mpi_t value,size_t nbits)
+{
+	int i=0;
+	char *buffer;			//create a new buffer for the output
+	buffer=malloc(nbits/8); //allocate memory for the buffer, number of bits / 8 to generate byte
+	gcry_mpi_print(GCRYMPI_FMT_STD,buffer,sizeof(buffer),NULL,value); //converts the MPI to a writable buffer
+	for (i = 0; i<nbits; i++){	//printout numger
+		if(i%32==0)
 			printf("\n");
-		printf("%02X", (unsigned char)buffer[i]);
+		printf("%0u", (unsigned char)buffer[i]);
+	}
+}
+
+/*output this number*/
+void mpiOut2(gcry_mpi_t value)
+
+{	int i=0;
+	char  buffer[1024/8],buffer2[1024/8]; //buffer for the output
+	gcry_randomize (buffer, 1024/8, GCRY_STRONG_RANDOM);
+	printf("\n random buffer: ");
+	for (i = 0; i<1024/8; i++){
+		if(i%32==0)
+			printf("\n");
+		printf("%0u", (unsigned char)buffer[i]);
 	}
 	printf("\n");
 	gcry_mpi_t test;
-	test=gcry_mpi_snew(1024);
-	gcry_mpi_scan(&test,GCRYMPI_FMT_STD,buffer,sizeof(buffer),&nscanned);
-	printf("nscanned: %zu\n",nscanned);
+	test=gcry_mpi_snew(1024/8);
+	gcry_mpi_scan(&test,GCRYMPI_FMT_STD,buffer,sizeof(buffer),NULL);
+
 	gcry_mpi_print(GCRYMPI_FMT_STD,buffer2,sizeof(buffer2),NULL,test); //converts the MPI to a writable buffer
 	printf("\n random buffer2:\n");
-	for (i = 0; i<1024; i++){
-			if(i%128==0)
+	for (i = 0; i<1024/8; i++){
+			if(i%32==0)
 				printf("\n");
-			printf("%02X", (unsigned char)buffer2[i]);
+			printf("%0u", (unsigned char)buffer2[i]);
 		}
 
 	printf("\n test");
@@ -179,6 +192,11 @@ long* randElement(long index)
 	}
 
 return elem;
+}
+
+void randNormEle(long index)
+{
+
 }
 
 long* randNormElement(long index)
